@@ -1,13 +1,19 @@
 <template>
     <section>
         <article class="grid">
-            <!--<div v-for="song in formatedSongs" v-if="songs" class="card">  v-for="song in songs" 
-                            <h2>{{ song.title }}</h2>
-                                <p>{{ song.preview }}</p>
-                              <div v-if="song.source">
-                                <player :sources="song.source"></player>
-                              </div>
-                        </div> -->
+            <div>
+            <h1>{{ playlist.title }}</h1>
+            <img :src="playlist.picture_xl" :alt="playlist.title" class="playlist-image">
+            </div>
+            
+            <div class="card">
+                <h2>{{ formatedSongs[1].title }}</h2> 
+                <img :src="formatedSongs[1].image" :alt="formatedSongs[1].title">
+                <p>{{ formatedSongs[1].source }}</p>
+                <div>
+                    <player v-if="formatedSongs[1].source != ''" :sources="formatedSongs[0].source"></player>
+                </div>
+            </div>
         </article>
     </section>
 </template>
@@ -15,8 +21,6 @@
 <script>
 import axios from 'axios';
 import Player from './Player.vue'
-
-const CORS = "https://cors-anywhere.herokuapp.com/";
 
 export default {
     name: 'songs',
@@ -26,42 +30,40 @@ export default {
 
     data() {
         return {
-            playlist: [],
-            songs: []
+            songs: [],
+            playlist: "",
         }
     },
 
     created() {
-        this.getRandomList();
-        //this.getApiData();
+        this.getPlaylist();
     },
 
     methods: {
-        getRandomList() {
+        getPlaylist() {
 
             let randomNumber = Math.floor((Math.random() * 9) + 0);
             let url = 'http://api.deezer.com/chart';
 
-            let options = {
-                mode: 'no-cors'
-            }
-            fetch(url, options)
-            .then((resp) =>resp.json())
-            .then(function(data){
-                
-            });
-               
-
-
-        },
-        getApiData() {
-
-            let url = this.playlist;
-
             axios.get(url)
-                .then((response) => {
-                    this.songs = response.data.data;
-                    console.log(response.data);
+                .then(res => {
+                    this.playlist = res.data.playlists.data[randomNumber];
+                    this.getSongs();
+                    console.log(this.playlist);
+                }).catch(error => {
+                    console.log('erro', error);
+                })
+                
+        },
+        getSongs() {
+
+            let playlistId = this.playlist.id;
+            let url = `https://api.deezer.com/playlist/${playlistId}`;
+            
+            axios.get(url)
+                .then((res) => {
+                    this.songs = res.data.tracks.data;
+                    console.log(res.data.tracks.data);
                 })
                 .catch((error) => console.log(error));
         }
@@ -72,8 +74,9 @@ export default {
             var formatedSongs = [];
             for (var key in this.songs) {
                 formatedSongs[key] = {
-                    title: this.songs[key].title,
-                    source: [this.songs[key].preview]
+                    title: this.songs[key].title.replace(/'/g, ''),
+                    source: [this.songs[key].preview],
+                    image: this.songs[key].album.cover_big
                 }
             }
             return formatedSongs;
@@ -81,11 +84,16 @@ export default {
     }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
+h1 { font-size: 1.5rem; }
 ul {
     list-style: none;
     padding: 0;
     margin: 0;
+}
+
+.text-center {
+    text-align: center;
 }
 
 .card {
@@ -97,5 +105,9 @@ ul {
 .grid {
     display: flex;
     flex-direction: column;
+}
+
+.playlist-image {
+    max-width: 30%;
 }
 </style>
