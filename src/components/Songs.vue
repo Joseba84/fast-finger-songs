@@ -2,12 +2,12 @@
     <section>
         <article class="grid">
             <!--<div v-for="song in formatedSongs" v-if="songs" class="card">  v-for="song in songs" 
-                    <h2>{{ song.title }}</h2>
-                        <p>{{ song.preview }}</p>
-                      <div v-if="song.source">
-                        <player :sources="song.source"></player>
-                      </div>
-                </div> -->
+                            <h2>{{ song.title }}</h2>
+                                <p>{{ song.preview }}</p>
+                              <div v-if="song.source">
+                                <player :sources="song.source"></player>
+                              </div>
+                        </div> -->
         </article>
     </section>
 </template>
@@ -41,27 +41,18 @@ export default {
 
             let randomNumber = Math.floor((Math.random() * 9) + 0);
             let url = 'http://api.deezer.com/chart';
-           
+
             let options = {
-                method: 'GET',
-                mode: 'no-cors',
-                cache: 'default'
+                mode: 'no-cors'
             }
             fetch(url, options)
-                .then(function(response) {
-                    if(response.ok) {
-                        console.log(response.json());
-                        return response.json();
-                    }
-                })
-                .then(function(json) {
-                    console.log(json);
-                });
-            /* axios.get(url)
-             .then((response) => {
-                 this.playlist = response.data.playlists.data[randomNumber].tracklist;
-             })
-             .catch((error) =>  console.log(error));*/
+            .then((resp) =>resp.json())
+            .then(function(data){
+                
+            });
+               
+
+
         },
         getApiData() {
 
