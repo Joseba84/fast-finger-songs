@@ -17,13 +17,4 @@ export default {
   }
 }
 </script>
-<style lang="scss">
-.hello {
-  text-align: center;
-}
-
-.container {
-  margin: 50px 0;
-}
-</style>
 

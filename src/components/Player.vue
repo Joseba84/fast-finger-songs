@@ -10,6 +10,10 @@
 
   export default {
     mixins: [VueHowler],
+    created() {
+      console.log(this.duration);
+      eventBus.$emit('duration', duration);
+    },
     computed: {
       percentage() {
         return this.progress * 100 + '%';
@@ -17,12 +21,3 @@
     }
   }
 </script>
-
-<style lang="scss">
-.progress-bar {
-  width:0;
-  height: 4px;
-  background-color: crimson;
-  transition: width .5s;
-}
-</style>

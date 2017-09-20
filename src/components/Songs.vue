@@ -2,16 +2,19 @@
     <section>
         <article class="grid">
             <div>
-            <h1>{{ playlist.title }}</h1>
+           <h1>{{ playlist.title }}</h1>
             <img :src="playlist.picture_xl" :alt="playlist.title" class="playlist-image">
             </div>
             
             <div class="card">
-                <h2>{{ formatedSongs[1].title }}</h2> 
-                <img :src="formatedSongs[1].image" :alt="formatedSongs[1].title">
-                <p>{{ formatedSongs[1].source }}</p>
+                <h2></h2> 
+                <div class="wrapper">
+                      <span class="play"></span>
+                <img :src="formatedSongs[0].image" alt="">
+                </div>
+                <p>{{ formatedSongs[0].source }}</p>
                 <div>
-                    <player v-if="formatedSongs[1].source != ''" :sources="formatedSongs[0].source"></player>
+                    <player  :sources="formatedSongs[0].source" :autoplay="true"></player>
                 </div>
             </div>
         </article>
@@ -20,7 +23,7 @@
 
 <script>
 import axios from 'axios';
-import Player from './Player.vue'
+import Player from './Player.vue';
 
 export default {
     name: 'songs',
@@ -37,6 +40,9 @@ export default {
 
     created() {
         this.getPlaylist();
+        eventBus.$on('duration', (duration) => {
+            console.log(duration);
+        });
     },
 
     methods: {
@@ -84,30 +90,3 @@ export default {
     }
 }
 </script>
-<style lang="scss">
-h1 { font-size: 1.5rem; }
-ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.text-center {
-    text-align: center;
-}
-
-.card {
-    & img {
-        max-width: 200px;
-    }
-}
-
-.grid {
-    display: flex;
-    flex-direction: column;
-}
-
-.playlist-image {
-    max-width: 30%;
-}
-</style>
