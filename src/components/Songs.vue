@@ -14,7 +14,7 @@
                 </div>
                 <p>{{ formatedSongs[0].source }}</p>
                 <div>
-                    <player  :sources="formatedSongs[0].source" :autoplay="true"></player>
+                    <player :sources="formatedSongs[0].source" songs="songs"></player>
                 </div>
             </div>
         </article>
@@ -27,15 +27,16 @@ import Player from './Player.vue';
 
 export default {
     name: 'songs',
-    components: {
-        Player
-    },
-
+    props: ['songs'],
     data() {
         return {
             songs: [],
             playlist: "",
         }
+    },
+    
+    components: {
+        Player
     },
 
     created() {
