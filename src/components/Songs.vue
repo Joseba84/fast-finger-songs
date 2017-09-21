@@ -12,9 +12,15 @@
                     <span class="play"></span>
                     <img v-if="firstSong.image" :src="firstSong.image" alt="">
                 </div>
+<<<<<<< HEAD
                 <p>{{ firstSong.source }}</p>
                 <div v-if="firstSong.source != ''">
                     <player :sources="firstSong.source"></player>
+=======
+                <p>{{ formatedSongs[0].source }}</p>
+                <div>
+                    <player :sources="formatedSongs[0].source" songs="songs"></player>
+>>>>>>> 5c207bdb612232e15230dc73043df1d9458d2733
                 </div>
             </div>
         </article>
@@ -27,16 +33,21 @@ import Player from './Player.vue';
 
 export default {
     name: 'songs',
-    components: {
-        Player
-    },
-
+    props: ['songs'],
     data() {
         return {
             songs: [],
             playlist: ""
         }
     },
+<<<<<<< HEAD
+=======
+    
+    components: {
+        Player
+    },
+
+>>>>>>> 5c207bdb612232e15230dc73043df1d9458d2733
     created() {
         this.getPlaylist();
     },
