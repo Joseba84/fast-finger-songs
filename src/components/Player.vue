@@ -6,18 +6,14 @@
   </div>
 </template>
 <script>
-  import VueHowler from 'vue-howler/dist/vue-howler.esm.js';
+import VueHowler from 'vue-howler/dist/vue-howler.esm.js';
 
-  export default {
-    mixins: [VueHowler],
-    created() {
-      console.log(this.duration);
-      eventBus.$emit('duration', duration);
-    },
-    computed: {
-      percentage() {
-        return this.progress * 100 + '%';
-      }
+export default {
+  mixins: [VueHowler],
+  computed: {
+    percentage() {
+      return this.progress * 100 + '%';
     }
   }
+}
 </script>

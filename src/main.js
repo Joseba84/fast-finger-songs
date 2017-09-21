@@ -7,8 +7,6 @@ import router from './router'
 
 Vue.config.productionTip = false
 
-const eventBus = new Vue();
-
 new Vue({
   el: '#app',
   Vue2Filters,
