@@ -1,10 +1,9 @@
 <template>
     <section>
-        
         <article class="grid">
-            <div class="card" v-if="formatedSongs[this.currentSong]">
-                <div v-if="formatedSongs[this.currentSong].source != ''">
-                    <player :songs="formatedSongs"></player>
+            <div class="card" v-if="formatedSongs">
+                <div v-if="currentSongSource != ''">
+                    <player :sources="currentSongSource" :songs="formatedSongs" :autoplay="true"></player>
                 </div>
             </div>
             <aside class="playlist">
@@ -19,6 +18,7 @@
 <script>
 import axios from 'axios';
 import Player from './Player.vue';
+import eventBus from '../eventBus';
 
 export default {
     name: 'songs',
@@ -28,12 +28,15 @@ export default {
     data() {
         return {
             songs: [],
-            playlist: "",
-            currentSong: 0
+            playlist: ""
         }
     },
     created() {
         this.getPlaylist();
+        console.log('eventBus' + eventBus.currentSong);
+    },
+    mounted() {
+
     },
     methods: {
         getPlaylist() {
@@ -73,11 +76,20 @@ export default {
             for (var key in this.songs) {
                 formatedSongs[key] = {
                     title: this.songs[key].title,
-                    source: this.songs[key].preview,
+                    source: [this.songs[key].preview],
                     image: this.songs[key].album.cover_big
                 }
             }
             return formatedSongs;
+        },
+        currentSongSource() {
+            var index = 0;
+            var source = this.formatedSongs[0].source;
+            eventBus.$on('changeSong', (i) => {
+               index =  i;
+                return this.formatedSongs[index].source;
+            });
+            return source;
         }
     }
 }

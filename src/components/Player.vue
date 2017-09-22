@@ -1,73 +1,54 @@
 
 <template>
   <div v-if="songs">
-    <h2>{{ songs[this.currentSong].title }}</h2>
+    <h2>{{ songs[this.currentSongIndex].title }}</h2>
     <div class="wrapper">
-      <span @click="togglePlay" class="play" :class="toggleActive"></span>
-      <img v-if="songs[this.currentSong].image" :src="songs[this.currentSong].image" alt="">
+      <span @click="togglePlayback" class="play" :class="toggleActive"></span>
+      <img v-if="songs[this.currentSongIndex].image" :src="songs[this.currentSongIndex].image" alt="">
     </div>
-    {{ duration() }}
-    {{ songSeek }}
     <div :style="{width:percentage}" class="progress-bar"></div>
   </div>
 </template>
 
 <script>
-import {Howler} from 'howler';
+import vueHowler from 'vue-howler';
+import eventBus from '../eventBus';
+
 const DURATION = 2;
 
 export default {
   name: 'Player',
-  props: ['songs'],
+  props:['songs'],
+  mixins: [vueHowler],
   data() {
     return {
       currentSong: 0,
-      sound: null,
     }
-  },
-  created() {
-    this.sound = new Howl({
-      src:[this.songs[this.currentSong].source]  
-    });
   },
   computed: {
     percentage() {
+      if (this.seek >= DURATION) {
+      console.log('NEXT');
+      this.stop();
+      this.emitMethod();
+      
+    }
       return this.progress * 100 + '%';
     },
     toggleActive() {
       return this.playing ? '' : 'active';
     },
-    songSeek() {
-      this.sound.on('onplay', function(){
-      return this.duration();
-      });
-      /*if (seekRounded >= DURATION) {
-        console.log('NEXT');
-        this.stop();
-      }
-      return seekRounded;*/
+    currentSongIndex() {
+      return this.currentSong;
     }
   },
+  created() {
+   
+  },
   methods: {
-    play() {
-      this.sound.play();
-    },
-    stop() {
-      this.sound.stop();
-    },
-    pause() {
-      this.sound.pause();
-    },
-    duration() {
-      return this.sound.duration();
-    },
-    togglePlay() {
-      let playing = this.sound.playing(this.sound);
-      if(playing) {
-        this.pause();
-      }else {
-        this.play();
-      }
+    emitMethod () {
+      let increment = this.currentSongIndex + 1;
+      eventBus.$emit('changeSong', increment);
     }
   }
 }
