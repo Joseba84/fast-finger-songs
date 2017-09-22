@@ -34,24 +34,30 @@ body {
       text-align: center;
   }
   
+   .grid {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      max-width: 1200px;
+  }
+
   .card {
     position: relative;
+    width: 60%;
     & img {
         width: 100%;
     }
     & .wrapper {
         position: relative;
-        max-width: 200px;
     }
   }
-  
-  .grid {
-      display: flex;
-      flex-direction: column;
-  }
-  
-  .playlist-image {
-      max-width: 30%;
+
+  .playlist {
+      width: 40%;
+      padding: 0 20px;
+      & img {
+          width: 100%;
+      }
   }
 
   .progress-bar {

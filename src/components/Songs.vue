@@ -1,28 +1,17 @@
 <template>
     <section>
+        
         <article class="grid">
-            <div>
-                <h1>{{ playlist.title }}</h1>
+            <div class="card" v-if="formatedSongs[this.currentSong]">
+                <div v-if="formatedSongs[this.currentSong].source != ''">
+                    <player :songs="formatedSongs"></player>
+                </div>
+            </div>
+            <aside class="playlist">
+                <h2>Playlist</h2>
                 <img :src="playlist.picture_xl" :alt="playlist.title" class="playlist-image">
-            </div>
-
-            <div class="card" v-if="firstSong">
-                <h2>{{ firstSong.title }}</h2>
-                <div class="wrapper">
-                    <span class="play"></span>
-                    <img v-if="firstSong.image" :src="firstSong.image" alt="">
-                </div>
-<<<<<<< HEAD
-                <p>{{ firstSong.source }}</p>
-                <div v-if="firstSong.source != ''">
-                    <player :sources="firstSong.source"></player>
-=======
-                <p>{{ formatedSongs[0].source }}</p>
-                <div>
-                    <player :sources="formatedSongs[0].source" songs="songs"></player>
->>>>>>> 5c207bdb612232e15230dc73043df1d9458d2733
-                </div>
-            </div>
+                <h3>{{ playlist.title }}</h3>
+            </aside>
         </article>
     </section>
 </template>
@@ -33,21 +22,16 @@ import Player from './Player.vue';
 
 export default {
     name: 'songs',
-    props: ['songs'],
-    data() {
-        return {
-            songs: [],
-            playlist: ""
-        }
-    },
-<<<<<<< HEAD
-=======
-    
     components: {
         Player
     },
-
->>>>>>> 5c207bdb612232e15230dc73043df1d9458d2733
+    data() {
+        return {
+            songs: [],
+            playlist: "",
+            currentSong: 0
+        }
+    },
     created() {
         this.getPlaylist();
     },
@@ -89,14 +73,11 @@ export default {
             for (var key in this.songs) {
                 formatedSongs[key] = {
                     title: this.songs[key].title,
-                    source: [this.songs[key].preview],
+                    source: this.songs[key].preview,
                     image: this.songs[key].album.cover_big
                 }
             }
             return formatedSongs;
-        },
-        firstSong() {
-            return this.formatedSongs[0];
         }
     }
 }

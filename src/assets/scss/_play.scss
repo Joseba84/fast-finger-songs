@@ -3,14 +3,13 @@ $foreground:#fff;
 
 $foreground-light:#fff;
 
-
 $size:30px;
 $ratio:1.2;
 
 $transition-time:0.3s;
 
-
 .play {
+    cursor: pointer;
     position: absolute;
     left:0;
     right:0;
