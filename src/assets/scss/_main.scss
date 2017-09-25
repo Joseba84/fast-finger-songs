@@ -34,7 +34,7 @@ body {
       text-align: center;
   }
   
-   .grid {
+  .grid {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
@@ -44,8 +44,12 @@ body {
   .card {
     position: relative;
     width: 60%;
+    & h2 {
+        min-height: 50px;
+    }
     & img {
         width: 100%;
+        max-height: 325px;
     }
     & .wrapper {
         position: relative;

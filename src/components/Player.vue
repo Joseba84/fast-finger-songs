@@ -1,54 +1,49 @@
 
 <template>
   <div v-if="songs">
-    <h2>{{ songs[this.currentSongIndex].title }}</h2>
     <div class="wrapper">
-      <span @click="togglePlayback" class="play" :class="toggleActive"></span>
-      <img v-if="songs[this.currentSongIndex].image" :src="songs[this.currentSongIndex].image" alt="">
+      <span  class="play"></span>
+      <img v-if="songs[this.currentSong].image" :src="songs[this.currentSong].image" alt="">
     </div>
-    <div :style="{width:percentage}" class="progress-bar"></div>
+    <audio ref="player" controls>
+      <source :src="track" type="audio/mpeg">
+    </audio>
+    <button @click="nextSong">NEXT</button>
+    <h2>{{ songs[this.currentSong].title }}</h2>
+    <!--<div :style="{width:percentage}" class="progress-bar"></div>-->
+   {{ currentSong }} <br>
+   {{ track }}
   </div>
 </template>
 
 <script>
-import vueHowler from 'vue-howler';
-import eventBus from '../eventBus';
 
 const DURATION = 2;
 
 export default {
   name: 'Player',
-  props:['songs'],
-  mixins: [vueHowler],
+  props: ['songs'],
   data() {
     return {
       currentSong: 0,
-    }
+      track: this.songs[0].source
+      }
+  },
+  mounted() {
+     this.$watch('track', () => {
+                this.$refs.player.load();
+                this.$refs.player.play();
+            });
   },
   computed: {
-    percentage() {
-      if (this.seek >= DURATION) {
-      console.log('NEXT');
-      this.stop();
-      this.emitMethod();
-      
+    song() {
+      return this.songs[this.currentSong].source
     }
-      return this.progress * 100 + '%';
-    },
-    toggleActive() {
-      return this.playing ? '' : 'active';
-    },
-    currentSongIndex() {
-      return this.currentSong;
-    }
-  },
-  created() {
-   
   },
   methods: {
-    emitMethod () {
-      let increment = this.currentSongIndex + 1;
-      eventBus.$emit('changeSong', increment);
+    nextSong() {
+      let trackSource = this.songs[this.currentSong++].source
+      this.track = trackSource === "" ? this.songs[this.currentSong+2].source: trackSource;
     }
   }
 }
