@@ -2,7 +2,7 @@
     <section>
         <article class="grid">
             <div class="card" v-if="formatedSongs">
-                <div v-if="currentSongSource != undefined">
+                <div>
                     <player :songs="formatedSongs"></player>
                 </div>
             </div>
@@ -31,7 +31,7 @@ export default {
         }
     },
     created() {
-        this.getPlaylist();
+        this.getPlaylist();  
     },
     methods: {
         getPlaylist() {
@@ -43,7 +43,6 @@ export default {
                 .then(res => {
                     this.playlist = res.data.playlists.data[randomNumber];
                     this.getSongs();
-                    //console.log(this.playlist);
                 }).catch(error => {
                     console.log('erro', error);
                 })
@@ -65,20 +64,15 @@ export default {
 
     computed: {
         formatedSongs() {
-
             let formatedSongs = [];
-
             for (var key in this.songs) {
                 formatedSongs[key] = {
                     title: this.songs[key].title,
-                    source: this.songs[key].preview,
+                    source: this.songs[key].preview !='' ? this.songs[key].preview: '',
                     image: this.songs[key].album.cover_big
                 }
             }
             return formatedSongs;
-        },
-        currentSongSource() {
-            return this.formatedSongs[0].source;
         }
     }
 }
