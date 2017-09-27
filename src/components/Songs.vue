@@ -71,16 +71,14 @@ export default {
             for (var key in this.songs) {
                 formatedSongs[key] = {
                     title: this.songs[key].title,
-                    source: [this.songs[key].preview],
+                    source: this.songs[key].preview,
                     image: this.songs[key].album.cover_big
                 }
             }
             return formatedSongs;
         },
         currentSongSource() {
-            var index = 0;
-            var source = this.formatedSongs[0].source;
-            return source;
+            return this.formatedSongs[0].source;
         }
     }
 }
