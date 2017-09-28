@@ -6,6 +6,14 @@
                     <player :songs="formatedSongs"></player>
                 </div>
             </div>
+            <div class="roller">
+                <ul>
+                    <li v-for="item in formatedSongs">
+                        <img :src="item.image" alt="">
+                        {{ item.title }}
+                    </li>
+                </ul>
+            </div>
             <aside class="playlist">
                 <h2>Playlist</h2>
                 <img :src="playlist.picture_xl" :alt="playlist.title" class="playlist-image">
