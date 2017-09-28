@@ -8,7 +8,6 @@ Vue.config.productionTip = false
 
 new Vue({
   el: '#app',
-  Vue2Filters,
   router,
   template: '<App/>',
   components: { App }
