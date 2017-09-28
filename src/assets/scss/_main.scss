@@ -7,7 +7,9 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background-color: #010101;
-    color: #f9f9f9
+    color: #f9f9f9;
+    margin:0;
+    border-top: 3px solid $brand-color;
   }
 
   .container {
