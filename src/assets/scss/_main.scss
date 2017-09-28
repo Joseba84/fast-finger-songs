@@ -55,6 +55,7 @@ body {
   .card {
     position: relative;
     width: 40%;
+    transition: all .8s;
     @media(max-width: 767px) {
         width: 100%;
     }

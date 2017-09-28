@@ -30,10 +30,11 @@ export default {
   mounted() {
     setTimeout(()=>{
       this.$refs.player.play();
-    },1000)
+    }, 2000)
   },
   computed: {
     song() {
+      this.$refs.player.play();
       return this.songs[this.currentSong];
     },
     player() {
