@@ -12,12 +12,8 @@
   "dependencies": {
     "axios": "^0.16.2",
     "express": "^4.15.5",
-    "howler": "^2.0.4",
-    "querystring": "^0.2.0",
     "vue": "^2.4.2",
-    "vue-howler": "^0.4.1",
-    "vue-router": "^2.7.0",
-    "vue2-filters": "^0.2.1"
+    "vue-router": "^2.7.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
