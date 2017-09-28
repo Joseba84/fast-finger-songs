@@ -3,7 +3,7 @@
   <div v-if="this.songs.length > 0">
     <div class="wrapper">
       <!--<span class="play"></span>-->
-      <img  :src="this.songs[this.currentSong].image" alt="">
+      <img :src="this.songs[this.currentSong].image" alt="">
     </div>
     <audio ref="player" @timeupdate="onTimeUpdateListener">
       <source :src="this.songs[this.currentSong].source" type="audio/mpeg">
@@ -28,7 +28,6 @@ export default {
     }
   },
   created() {
-    console.log(this.$refs.player);
     setTimeout(()=>{
       this.$refs.player.play();
     },1000)

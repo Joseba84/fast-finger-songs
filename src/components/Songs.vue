@@ -56,7 +56,6 @@ export default {
             axios.get(url)
                 .then((res) => {
                     this.songs = res.data.tracks.data;
-                    //console.log(res.data.tracks.data);
                 })
                 .catch((error) => console.log(error));
         }
@@ -65,13 +64,18 @@ export default {
     computed: {
         formatedSongs() {
             let formatedSongs = [];
-            for (var key in this.songs) {
-                formatedSongs[key] = {
-                    title: this.songs[key].title,
-                    source: this.songs[key].preview !='' ? this.songs[key].preview: '',
-                    image: this.songs[key].album.cover_big
+            let i = 0;
+            for (var index in this.songs) {
+                if(this.songs[index].title !=='' && this.songs[index].album.cover_big !=='' && this.songs[index].preview !=='' ) {
+                    formatedSongs[i] = {
+                        title: this.songs[index].title,
+                        source: this.songs[index].preview,
+                        image: this.songs[index].album.cover_big
+                    }
+                    i++;
                 }
             }
+            
             return formatedSongs;
         }
     }

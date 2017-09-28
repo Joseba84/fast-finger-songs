@@ -1,6 +1,9 @@
 @import 'play';
+
+$brand-color : #00BFFF;
+
 body {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    font-family: 'Titillium Web', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background-color: #010101;
@@ -17,11 +20,18 @@ body {
   }
 
   a { 
-      color: #00BFFF;
+      color: $brand-color;
      }
 
   h1 { 
-      font-size: 1.5rem;
+      font-size: 2.5rem;
+      font-weight: 300;
+      color:$brand-color;
+      margin-bottom: 40px;
+     }
+
+  h2 {
+        margin-top: 0;
      }
 
   ul {
@@ -43,13 +53,12 @@ body {
 
   .card {
     position: relative;
-    width: 60%;
+    width: 40%;
     & h2 {
         min-height: 50px;
     }
     & img {
         width: 100%;
-        max-height: 325px;
     }
     & .wrapper {
         position: relative;
@@ -57,9 +66,9 @@ body {
   }
 
   .playlist {
-      width: 40%;
-      padding: 0 20px;
+      width: 20%;
       & img {
+          max-width: 240px;
           width: 100%;
       }
   }
@@ -67,6 +76,6 @@ body {
   .progress-bar {
     width:0;
     height: 4px;
-    background-color: #00BFFF;
+    background-color: $brand-color;
     transition: width 1s;
   }
