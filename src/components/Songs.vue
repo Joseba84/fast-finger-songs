@@ -6,14 +6,7 @@
                     <player :songs="formatedSongs"></player>
                 </div>
             </div>
-            <div class="roller">
-                <ul>
-                    <li v-for="item in formatedSongs">
-                        <img :src="item.image" alt="">
-                        {{ item.title }}
-                    </li>
-                </ul>
-            </div>
+            <roller :songs="formatedSongs"></roller>
             <aside class="playlist">
                 <h2>Playlist</h2>
                 <img :src="playlist.picture_xl" :alt="playlist.title" class="playlist-image">
@@ -26,11 +19,13 @@
 <script>
 import axios from 'axios';
 import Player from './Player.vue';
+import Roller from './Roller.vue';
 
 export default {
     name: 'songs',
     components: {
-        Player
+        Player,
+        Roller
     },
     data() {
         return {
@@ -38,7 +33,7 @@ export default {
             playlist: ""
         }
     },
-    created() {
+    mounted() {
         this.getPlaylist();
     },
     methods: {
@@ -46,7 +41,7 @@ export default {
 
             let randomNumber = Math.floor((Math.random() * 9) + 0);
             let url = 'https://cors-anywhere.herokuapp.com/https://api.deezer.com/chart';
-            
+
             axios.get(url)
                 .then(res => {
                     this.playlist = res.data.playlists.data[randomNumber];
@@ -54,7 +49,6 @@ export default {
                 }).catch(error => {
                     console.log('erro', error);
                 })
-
         },
         getSongs() {
 
@@ -73,12 +67,15 @@ export default {
         formatedSongs() {
             let formatedSongs = [];
             let i = 0;
+            console.log(this.songs);
             for (var index in this.songs) {
-                if (this.songs[index].title !== '' && this.songs[index].album.cover_big !== '' && this.songs[index].preview !== '') {
+                if (this.songs[index].title !== '' && this.songs[index].album.cover_big !== '' && this.songs[index].preview !== '' && this.songs[index].album.title !== '') {
                     formatedSongs[i] = {
                         title: this.songs[index].title,
                         source: this.songs[index].preview,
-                        image: this.songs[index].album.cover_big
+                        image: this.songs[index].album.cover_big,
+                        album: this.songs[index].album.title,
+                        key: index
                     }
                     i++;
                 }

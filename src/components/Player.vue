@@ -1,5 +1,7 @@
 
 <template>
+<div>
+  <span v-if="this.songs.length === 0">Loading...</span>
   <div v-if="this.songs.length > 0">
     <div class="wrapper">
       <!--<span class="play"></span>-->
@@ -11,10 +13,11 @@
     <div class="progress-bar" :style="{width: this.progress}"></div>
     <h2>{{ this.songs[this.currentSong].title }}</h2>
   </div>
+</div>
 </template>
 
 <script>
-
+import eventBus from '../eventBus';
 const DURATION = 2;
 
 export default {
@@ -44,9 +47,9 @@ export default {
   methods: {
     nextSong() {
       let trackSource = this.songs[this.currentSong++].source;
-      trackSource === "" ? this.songs[this.currentSong + 2].source : trackSource;
       this.player.load();
       this.player.play();
+      eventBus.$emit('currentIndex',this.currentSong);
     },
     onTimeUpdateListener() {
       this.currentTime = this.$refs.player.currentTime;
