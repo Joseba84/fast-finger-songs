@@ -27,7 +27,7 @@ export default {
       progress: 0
     }
   },
-  created() {
+  mounted() {
     setTimeout(()=>{
       this.$refs.player.play();
     },1000)

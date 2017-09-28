@@ -31,14 +31,14 @@ export default {
         }
     },
     created() {
-        this.getPlaylist();  
+        this.getPlaylist();
     },
     methods: {
         getPlaylist() {
 
             let randomNumber = Math.floor((Math.random() * 9) + 0);
-            let url = 'https://api.deezer.com/chart?output=jsonp';
-
+            let url = 'https://cors-anywhere.herokuapp.com/https://api.deezer.com/chart';
+            
             axios.get(url)
                 .then(res => {
                     this.playlist = res.data.playlists.data[randomNumber];
@@ -51,7 +51,7 @@ export default {
         getSongs() {
 
             let playlistId = this.playlist.id;
-            let url = `https://api.deezer.com/playlist/${playlistId}?output=jsonp`;
+            let url = `https://cors-anywhere.herokuapp.com/https://api.deezer.com/playlist/${playlistId}`;
 
             axios.get(url)
                 .then((res) => {
@@ -66,7 +66,7 @@ export default {
             let formatedSongs = [];
             let i = 0;
             for (var index in this.songs) {
-                if(this.songs[index].title !=='' && this.songs[index].album.cover_big !=='' && this.songs[index].preview !=='' ) {
+                if (this.songs[index].title !== '' && this.songs[index].album.cover_big !== '' && this.songs[index].preview !== '') {
                     formatedSongs[i] = {
                         title: this.songs[index].title,
                         source: this.songs[index].preview,
@@ -75,7 +75,7 @@ export default {
                     i++;
                 }
             }
-            
+
             return formatedSongs;
         }
     }
