@@ -47,11 +47,17 @@ body {
       flex-direction: row;
       justify-content: space-between;
       max-width: 1200px;
+      @media(max-width: 767px) {
+        flex-direction: column;
+    }
   }
 
   .card {
     position: relative;
     width: 40%;
+    @media(max-width: 767px) {
+        width: 100%;
+    }
     & h2 {
         min-height: 50px;
     }
@@ -68,7 +74,13 @@ body {
       & img {
           max-width: 240px;
           width: 100%;
+          @media(max-width: 767px) {
+            max-width: 100%;
+        }
       }
+      @media(max-width: 767px) {
+        width: 100%;
+    }
   }
 
   .progress-bar {

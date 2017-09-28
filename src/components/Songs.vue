@@ -37,7 +37,7 @@ export default {
         getPlaylist() {
 
             let randomNumber = Math.floor((Math.random() * 9) + 0);
-            let url = 'https://api.deezer.com/chart';
+            let url = 'https://api.deezer.com/chart?output=jsonp';
 
             axios.get(url)
                 .then(res => {
@@ -51,7 +51,7 @@ export default {
         getSongs() {
 
             let playlistId = this.playlist.id;
-            let url = `https://api.deezer.com/playlist/${playlistId}`;
+            let url = `https://api.deezer.com/playlist/${playlistId}?output=jsonp`;
 
             axios.get(url)
                 .then((res) => {
