@@ -30,7 +30,7 @@ export default {
   mounted() {
     setTimeout(()=>{
       this.$refs.player.play();
-    }, 2000)
+    }, 2000);
   },
   computed: {
     song() {

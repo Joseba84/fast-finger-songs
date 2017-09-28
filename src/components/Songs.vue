@@ -58,7 +58,6 @@ export default {
                     this.songs = res.data.tracks.data;
                 })
                 .catch((error) => console.log(error));
-                
         }
     },
 
