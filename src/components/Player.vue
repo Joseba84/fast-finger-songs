@@ -1,10 +1,10 @@
 
 <template>
 <div>
-  <span v-if="this.songs.length === 0">Loading...</span>
+  <div v-if="this.songs.length === 0" class="spinner"></div>
   <div v-if="this.songs.length > 0">
     <div class="wrapper">
-      <!--<span class="play"></span>-->
+      <span @click="togglePlayPause" class="play" :class="toggleActive"></span>
       <img :src="this.songs[this.currentSong].image" alt="">
     </div>
     <audio ref="player" @timeupdate="onTimeUpdateListener">
@@ -27,13 +27,9 @@ export default {
     return {
       currentSong: 0,
       currentTime: 0,
-      progress: 0
+      progress: 0,
+      playing: false
     }
-  },
-  mounted() {
-    setTimeout(()=>{
-      this.$refs.player.play();
-    }, 2000);
   },
   computed: {
     song() {
@@ -42,6 +38,9 @@ export default {
     },
     player() {
       return this.$refs.player;
+    },
+    toggleActive() {
+     return this.playing ? 'active' : '';
     }   
   },
   methods: {
@@ -57,6 +56,21 @@ export default {
       if(this.progress === '100%') {
         this.nextSong();
       }
+    },
+    togglePlayPause() {
+      if(this.playing) {
+        this.pause();
+      }else{
+        this.play();
+      }
+    },
+    play() {
+      this.$refs.player.play();
+      this.playing = true;
+    },
+    pause() {
+      this.$refs.player.pause();
+      this.playing = false;
     }
   }
 }

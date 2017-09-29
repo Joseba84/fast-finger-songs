@@ -67,7 +67,6 @@ export default {
         formatedSongs() {
             let formatedSongs = [];
             let i = 0;
-            console.log(this.songs);
             for (var index in this.songs) {
                 if (this.songs[index].title !== '' && this.songs[index].album.cover_big !== '' && this.songs[index].preview !== '' && this.songs[index].album.title !== '') {
                     formatedSongs[i] = {

@@ -1,19 +1,31 @@
 .roller {
       width: 40%;
+      @media(max-width:767px) {
+          width: 100%;
+      }
+      & ul {
+       width:100%;
+       max-height:400px;
+       overflow: hidden;
+       transition: transform .3s ease-in-out;
+      }
       & li {
-        align-items: flex-start;
-        display: flex;
-        margin: 10px;
+        display:none;
+        margin: 20px 10px;
         padding: 10px;
-        z-index: 0;
-        &.active {
-            border: 1px solid $brand-color;
-        }
         &:first-child {
             margin-top: 0;
         }
+        &::before {
+            content: '';
+            position:absolute;
+            top:-10px;
+            display: block;
+            width: 40px;
+            height: 2px;
+            background-color: $brand-color;
+        }
         & .content {
-         flex-direction: column;
          padding-left: 10px;
         }
         & .content p {
@@ -23,9 +35,19 @@
             color: #999;
             font-size: 15px;
         }
+        &.current {
+            background-color: $brand-color;
+               &::before {
+                   display: none;
+               }
+           }
       }
       & img {
           width: 80px;
           height: 80px;
       }
+  }
+  .roller li.active {
+         position: relative;
+         display: flex;  
   }
