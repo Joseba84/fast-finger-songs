@@ -27,7 +27,6 @@ export default {
         eventBus.$on('currentIndex', (i) => {
             this.active = i;
             this.nextTwo = i + 3;
-            console.log(this.active, this.nextTwo)
         });
     },
     methods: {
