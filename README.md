@@ -1,7 +1,5 @@
 # fast-finger-songs
 
-> Para aquellos que sufren el sindrome de "fast-finger" al escuchar una canción...
-
 ## Build Setup
 
 ``` bash
