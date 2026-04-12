@@ -16,9 +16,12 @@ export default function Player({ songs, currentIndex, onNext }: PlayerProps) {
   const song = songs[currentIndex];
 
   useEffect(() => {
-    if (audioRef.current && playing) {
+    if (audioRef.current) {
+      audioRef.current.pause();
       audioRef.current.load();
-      audioRef.current.play().catch(e => console.error("Play failed", e));
+      if (playing) {
+        audioRef.current.play().catch(e => console.error("Play failed", e));
+      }
     }
   }, [currentIndex]);
 
@@ -35,12 +38,16 @@ export default function Player({ songs, currentIndex, onNext }: PlayerProps) {
   const onTimeUpdate = () => {
     if (!audioRef.current) return;
     const { currentTime, duration } = audioRef.current;
-    const progressPercent = (currentTime / duration) * 100;
-    setProgress(`${progressPercent}%`);
-    if (progressPercent >= 100) {
-      onNext();
+    if (duration > 0) {
+      const progressPercent = (currentTime / duration) * 100;
+      setProgress(`${progressPercent}%`);
+      if (progressPercent >= 100) {
+        onNext();
+      }
     }
   };
+
+  if (!song) return <div className="spinner"></div>;
 
   return (
     <div>
