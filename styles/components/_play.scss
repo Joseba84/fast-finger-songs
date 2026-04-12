@@ -1,0 +1,38 @@
+.play {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    top: 50%;
+    left: 50%;
+    margin-left: -30px;
+    margin-top: -30px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 100%;
+    cursor: pointer;
+    transition: all 0.5s;
+    z-index: 10;
+    &:after {
+        content: '';
+        position: absolute;
+        left: 25px;
+        top: 18px;
+        border-width: 12px 0 12px 18px;
+        border-style: solid;
+        border-color: transparent transparent transparent #fff;
+    }
+    &:hover {
+        background: rgba(0, 0, 0, 0.8);
+    }
+    &.active {
+        background: $brand-color;
+        &:after {
+            border-width: 0 4px 0 4px;
+            border-style: double;
+            border-color: transparent transparent transparent #fff;
+            left: 24px;
+            top: 18px;
+            height: 24px;
+            width: 12px;
+        }
+    }
+}

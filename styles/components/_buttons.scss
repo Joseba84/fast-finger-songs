@@ -1,0 +1,12 @@
+button {
+    background: $brand-color;
+    border: 0;
+    color: #fff;
+    padding: 10px 30px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.5s;
+    &:hover {
+        background: darken($brand-color, 10%);
+    }
+}

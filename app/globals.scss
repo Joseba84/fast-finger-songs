@@ -1,0 +1,116 @@
+@import '../styles/variables';
+@import '../styles/mixins';
+@import '../styles/animations';
+@import '../styles/components/play';
+@import '../styles/components/roller';
+@import '../styles/components/buttons';
+
+html {
+    box-sizing: border-box;
+    font-size: 16px;
+}
+body {
+    font-family: 'Titillium Web', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #010101;
+    color: #f9f9f9;
+    margin:0;
+    border-top: 3px solid $brand-color;
+    height: 100vh;
+    overflow-y: hidden;
+    @media(max-width: 767px) {
+        height: initial;
+        overflow-y: auto;
+    }
+  }
+
+  .container {
+    max-width: 80%;
+    margin: 60px auto;
+  }
+
+  a { 
+      color: $brand-color;
+     }
+
+  h1 { 
+      font-size: 2.5rem;
+      font-weight: 300;
+      color:$brand-color;
+      margin-bottom: 40px;
+     }
+
+  h2 {
+        margin-top: 0;
+     }
+
+  ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+  }
+  
+  .text-center {
+      text-align: center;
+  }
+  
+  .grid {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      max-width: 1200px;
+      @media(max-width: 767px) {
+        flex-direction: column;
+    }
+  }
+  .spinner {
+    width: 50px;
+    height: 50px;
+    background-color: #fff;
+    margin: 100px auto;
+    -webkit-animation: sk-rotateplane 1.2s infinite ease-in-out;
+    animation: sk-rotateplane 1.2s infinite ease-in-out;
+  }
+
+  .card {
+    position: relative;
+    width: 40%;
+    @media(max-width: 767px) {
+        width: 100%;
+    }
+    & h2 {
+        min-height: 50px;
+    }
+    & img {
+        width: 100%;
+        @include fadeIn();
+    }
+    & .wrapper {
+        position: relative;
+    }
+  }
+  
+  .playlist {
+      width: 20%;
+      padding-left: 30px;
+      @media(max-width: 767px) {
+        width: 100%;
+        padding-left: 30px;
+        }
+      & img {
+          max-width: 240px;
+          width: 100%;
+          @include fadeIn();
+          @media(max-width: 767px) {
+            max-width: 100%;
+        }
+      }
+  }
+
+  .progress-bar {
+    width:0;
+    height: 4px;
+    background-color: $brand-color;
+    transition: width 1s;
+  }
