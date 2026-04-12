@@ -7,52 +7,42 @@ import Roller from '@/components/Roller';
 
 export default function SongsPage() {
   const [songs, setSongs] = useState<any[]>([]);
-  const [playlist, setPlaylist] = useState<any>(null);
+  const [playlistInfo, setPlaylistInfo] = useState({ title: 'Top Hits', picture: 'https://is1-ssl.mzstatic.com/image/thumb/Purple122/v4/4a/01/5e/4a015e5a-273a-4a2e-8a2e-5a5a5a5a5a5a/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-10.png/512x512bb.jpg' });
   const [currentIndex, setCurrentIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const fetchWithProxy = async (targetUrl: string) => {
-    // Usamos allorigins.win como proxy de CORS ya que no requiere activación manual
-    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
-    const res = await axios.get(proxyUrl);
-    return JSON.parse(res.data.contents);
-  };
-
-  const getPlaylist = async () => {
+  const getSongs = async () => {
     try {
-      const randomNumber = Math.floor(Math.random() * 9);
-      const data = await fetchWithProxy('https://api.deezer.com/chart');
-      const selectedPlaylist = data.playlists.data[randomNumber];
-      setPlaylist(selectedPlaylist);
-      getSongs(selectedPlaylist.id);
+      setLoading(true);
+      // Usamos la API de iTunes Search para obtener canciones populares (Top Hits)
+      // No requiere proxy CORS en la mayoría de navegadores modernos
+      const terms = ['pop', 'rock', 'dance', 'hits'];
+      const randomTerm = terms[Math.floor(Math.random() * terms.length)];
+      const url = `https://itunes.apple.com/search?term=${randomTerm}&limit=25&media=music`;
+      
+      const res = await axios.get(url);
+      setSongs(res.data.results);
+      setLoading(false);
     } catch (err) {
-      console.error('Error fetching playlist:', err);
-      setError('Error al cargar la playlist. Intenta refrescar.');
-    }
-  };
-
-  const getSongs = async (playlistId: number) => {
-    try {
-      const data = await fetchWithProxy(`https://api.deezer.com/playlist/${playlistId}`);
-      setSongs(data.tracks.data);
-    } catch (err) {
-      console.error('Error fetching songs:', err);
-      setError('Error al cargar las canciones.');
+      console.error('Error fetching songs from iTunes:', err);
+      setError('Error al cargar la música. Intenta refrescar.');
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    getPlaylist();
+    getSongs();
   }, []);
 
   const formattedSongs = useMemo(() => {
     return songs
-      .filter(song => song.title && song.album?.cover_big && song.preview && song.album?.title)
+      .filter(song => song.trackName && song.artworkUrl100 && song.previewUrl && song.collectionName)
       .map((song, index) => ({
-        title: song.title,
-        source: song.preview,
-        image: song.album.cover_big,
-        album: song.album.title,
+        title: song.trackName,
+        source: song.previewUrl,
+        image: song.artworkUrl100.replace('100x100bb', '600x600bb'), // Mejoramos la calidad de la imagen
+        album: song.collectionName,
         key: index
       }));
   }, [songs]);
@@ -61,7 +51,7 @@ export default function SongsPage() {
     return (
       <section className="text-center">
         <p>{error}</p>
-        <button onClick={() => { setError(null); getPlaylist(); }}>Reintentar</button>
+        <button onClick={() => { setError(null); getSongs(); }}>Reintentar</button>
       </section>
     );
   }
@@ -70,7 +60,7 @@ export default function SongsPage() {
     <section>
       <article className="grid">
         <div className="card">
-          {formattedSongs.length > 0 ? (
+          {!loading && formattedSongs.length > 0 ? (
             <Player 
               songs={formattedSongs} 
               currentIndex={currentIndex} 
@@ -81,11 +71,11 @@ export default function SongsPage() {
           )}
         </div>
         <Roller songs={formattedSongs} activeIndex={currentIndex} />
-        {playlist && (
+        {!loading && (
           <aside className="playlist">
             <h2>Playlist</h2>
-            <img src={playlist.picture_xl} alt={playlist.title} className="playlist-image" />
-            <h3>{playlist.title}</h3>
+            <img src={playlistInfo.picture} alt={playlistInfo.title} className="playlist-image" />
+            <h3>{playlistInfo.title}</h3>
           </aside>
         )}
       </article>
