@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import "./globals.scss";
 
 export const metadata: Metadata = {
@@ -19,6 +20,10 @@ export default function RootLayout({
       <body>
         <div id="app" className="container">
           <h1>Fast Finger Songs</h1>
+          <nav style={{ marginBottom: '20px', display: 'flex', gap: '15px', justifyContent: 'center' }}>
+            <Link href="/" style={{ color: '#00BFFF', textDecoration: 'none', fontWeight: 'bold' }}>Playlist</Link>
+            <Link href="/guess" style={{ color: '#00BFFF', textDecoration: 'none', fontWeight: 'bold' }}>Guess Game</Link>
+          </nav>
           {children}
         </div>
       </body>
