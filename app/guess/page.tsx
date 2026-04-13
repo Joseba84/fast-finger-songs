@@ -13,29 +13,32 @@ export default function GuessPage() {
     try {
       setLoading(true);
       
-      const genres = [
-        'Pop Hits', 'Rock Classics', 'Dance Party', '80s Anthems', 
-        '90s Hits', 'Indie Rock', 'Electronic', 'Jazz Essentials', 
-        'Lo-fi Beats', 'Acoustic Morning', 'Latin Hits', 'Reggaeton'
-      ];
-      
-      const randomGenre = genres[Math.floor(Math.random() * genres.length)];
-      const url = `https://itunes.apple.com/search?term=${encodeURIComponent(randomGenre)}&limit=30&media=music`;
+      // Using Apple Music RSS for Top 50 Songs in Spain (more recognizable for guessing)
+      // You can change 'es' to 'us' for global hits
+      const url = `https://itunes.apple.com/es/rss/topsongs/limit=50/json`;
       
       const res = await axios.get(url);
-      const results = res.data.results;
+      const entries = res.data.feed.entry;
       
-      if (results.length > 0) {
-        setSongs(results);
+      if (entries && entries.length > 0) {
+        // Map RSS format to our internal song format
+        const mappedSongs = entries.map((entry: any) => ({
+          trackName: entry['im:name'].label,
+          previewUrl: entry.link.find((l: any) => l.attributes.rel === 'enclosure')?.attributes.href,
+          artworkUrl100: entry['im:image'][2]?.label, // Taking the largest available image
+          collectionName: entry['im:collection']['im:name'].label
+        }));
+        
+        setSongs(mappedSongs);
       } else {
-        setError('No se encontraron canciones. Reintentando...');
+        setError('No se pudieron cargar los éxitos actuales. Reintentando...');
         setTimeout(getSongs, 2000);
       }
       
       setLoading(false);
     } catch (err) {
-      console.error('Error fetching songs from iTunes:', err);
-      setError('Error al conectar con la API de música.');
+      console.error('Error fetching top songs from iTunes RSS:', err);
+      setError('Error al conectar con la lista de éxitos.');
       setLoading(false);
     }
   };
@@ -46,12 +49,14 @@ export default function GuessPage() {
 
   const formattedSongs = useMemo(() => {
     return songs
-      .filter(song => song.trackName && song.artworkUrl100 && song.previewUrl && song.collectionName)
+      .filter(song => song.trackName && song.artworkUrl100 && song.previewUrl)
       .map((song, index) => ({
         title: song.trackName,
         source: song.previewUrl,
-        image: song.artworkUrl100.replace('100x100bb', '400x400bb'),
-        album: song.collectionName,
+        // The RSS image URL doesn't always follow the same replace pattern, 
+        // but we take the 170x170 one which is enough for the game
+        image: song.artworkUrl100,
+        album: song.collectionName || "Unknown Album",
         key: index
       }));
   }, [songs]);
@@ -70,8 +75,23 @@ export default function GuessPage() {
   return (
     <section>
       <div className="guess-game-container">
-        <h2>Guess the Song</h2>
-        <p style={{ marginBottom: '20px' }}>Listen to the snippet and choose the right song!</p>
+        <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+          <h2>Guess the Hit</h2>
+          <span style={{ 
+            backgroundColor: '#00BFFF', 
+            color: 'black', 
+            padding: '2px 8px', 
+            borderRadius: '10px', 
+            fontSize: '0.7rem',
+            fontWeight: 'bold',
+            textTransform: 'uppercase'
+          }}>
+            Top 50 Spain
+          </span>
+        </div>
+        <p style={{ textAlign: 'center', marginBottom: '20px' }}>
+          ¿Reconoces los éxitos del momento? ¡Demuéstralo!
+        </p>
         <GuessGame songs={formattedSongs} onNext={getSongs} />
       </div>
     </section>
