@@ -13,23 +13,30 @@ export default function GuessPage() {
     try {
       setLoading(true);
       
-      // Using Apple Music RSS for Top 50 Songs in Spain (more recognizable for guessing)
-      // You can change 'es' to 'us' for global hits
       const url = `https://itunes.apple.com/es/rss/topsongs/limit=50/json`;
-      
       const res = await axios.get(url);
       const entries = res.data.feed.entry;
       
       if (entries && entries.length > 0) {
-        // Map RSS format to our internal song format
-        const mappedSongs = entries.map((entry: any) => ({
-          trackName: entry['im:name'].label,
-          previewUrl: entry.link.find((l: any) => l.attributes.rel === 'enclosure')?.attributes.href,
-          artworkUrl100: entry['im:image'][2]?.label, // Taking the largest available image
-          collectionName: entry['im:collection']['im:name'].label
-        }));
+        const mappedSongs = entries.map((entry: any) => {
+          // Get the preview URL carefully from the link array
+          const previewLink = entry.link.find((l: any) => l.attributes.rel === 'enclosure');
+          const previewUrl = previewLink ? previewLink.attributes.href : null;
+          
+          // Get the largest image (usually index 2 in the im:image array)
+          const imageArray = entry['im:image'];
+          const artworkUrl = imageArray && imageArray.length > 0 ? imageArray[imageArray.length - 1].label : null;
+
+          return {
+            trackName: entry['im:name'].label,
+            previewUrl: previewUrl,
+            artworkUrl100: artworkUrl,
+            collectionName: entry['im:collection']?.['im:name']?.label || "Unknown Album"
+          };
+        });
         
-        setSongs(mappedSongs);
+        // Filter out songs without preview or image to avoid broken UI
+        setSongs(mappedSongs.filter(s => s.previewUrl && s.artworkUrl100));
       } else {
         setError('No se pudieron cargar los éxitos actuales. Reintentando...');
         setTimeout(getSongs, 2000);
@@ -48,15 +55,11 @@ export default function GuessPage() {
   }, []);
 
   const formattedSongs = useMemo(() => {
-    return songs
-      .filter(song => song.trackName && song.artworkUrl100 && song.previewUrl)
-      .map((song, index) => ({
+    return songs.map((song, index) => ({
         title: song.trackName,
         source: song.previewUrl,
-        // The RSS image URL doesn't always follow the same replace pattern, 
-        // but we take the 170x170 one which is enough for the game
         image: song.artworkUrl100,
-        album: song.collectionName || "Unknown Album",
+        album: song.collectionName,
         key: index
       }));
   }, [songs]);
@@ -82,16 +85,13 @@ export default function GuessPage() {
             color: 'black', 
             padding: '2px 8px', 
             borderRadius: '10px', 
-            fontSize: '0.7rem',
-            fontWeight: 'bold',
-            textTransform: 'uppercase'
+            fontSize: '0.7rem', 
+            fontWeight: 'bold', 
+            textTransform: 'uppercase' 
           }}>
             Top 50 Spain
           </span>
         </div>
-        <p style={{ textAlign: 'center', marginBottom: '20px' }}>
-          ¿Reconoces los éxitos del momento? ¡Demuéstralo!
-        </p>
         <GuessGame songs={formattedSongs} onNext={getSongs} />
       </div>
     </section>
