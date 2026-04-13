@@ -74,88 +74,89 @@ export default function GuessGame({ songs, onNext }: GuessGameProps) {
   if (!currentSong) return <div className="spinner"></div>;
 
   return (
-    <div className="card text-center" style={{ padding: '20px', maxWidth: '500px', margin: '0 auto' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <h3 style={{ margin: 0, color: '#00BFFF' }}>Score: {score}</h3>
-        <button 
-          onClick={togglePlay}
-          style={{ 
-            backgroundColor: '#00BFFF', 
-            color: 'black', 
-            border: 'none', 
-            borderRadius: '50%', 
-            width: '50px', 
-            height: '50px', 
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: '0 4px 10px rgba(0,191,255,0.3)'
-          }}
-        >
-          {isPlaying ? (
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
-          ) : (
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-          )}
-        </button>
+    <div className="card text-center" style={{ padding: '0px', maxWidth: '400px', margin: '0 auto', background: 'transparent' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '15px' }}>
+        <h3 style={{ margin: 0, color: '#00BFFF', fontSize: '1.5rem' }}>Score: {score}</h3>
       </div>
 
-      <div style={{ marginBottom: '25px', position: 'relative' }}>
+      <div style={{ marginBottom: '25px', position: 'relative', cursor: 'pointer' }} onClick={togglePlay}>
          <div style={{ 
             width: '100%', 
             aspectRatio: '1/1', 
-            borderRadius: '15px', 
+            borderRadius: '10px', 
             overflow: 'hidden',
-            backgroundColor: '#1a1a1a',
+            backgroundColor: '#111',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            border: '1px solid #333',
-            boxShadow: '0 8px 25px rgba(0,0,0,0.5)'
+            border: '1px solid #222',
+            boxShadow: '0 10px 30px rgba(0,0,0,0.6)',
+            position: 'relative'
          }}>
             {answered ? (
               <img 
                 src={currentSong.image} 
                 alt="Song cover" 
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                onError={(e) => {
-                  (e.target as HTMLImageElement).style.display = 'none';
-                }}
               />
             ) : (
               <div style={{ 
                 width: '100%', 
                 height: '100%', 
-                background: 'linear-gradient(135deg, #1a1a1a 0%, #003366 100%)',
+                background: 'linear-gradient(45deg, #050505 0%, #1a1a1a 100%)',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                justifyContent: 'center',
-                padding: '20px'
+                justifyContent: 'center'
               }}>
-                <span style={{ fontSize: '4rem', marginBottom: '10px' }}>?</span>
-                <p style={{ fontWeight: 'bold', letterSpacing: '2px', opacity: 0.7 }}>GUESS THE SONG</p>
+                <span style={{ fontSize: '5rem', opacity: 0.2 }}>🎵</span>
+                <p style={{ fontWeight: 'bold', letterSpacing: '3px', opacity: 0.4, fontSize: '0.8rem' }}>GUESS THE SONG</p>
               </div>
             )}
+
+            {/* Play/Pause Overlay Button */}
+            <div style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: '80px',
+              height: '80px',
+              backgroundColor: 'rgba(0,0,0,0.5)',
+              border: '2px solid #00BFFF',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#00BFFF',
+              zIndex: 10,
+              transition: 'all 0.3s ease',
+              opacity: isPlaying && !answered ? 0.3 : 1
+            }}>
+               {isPlaying ? (
+                 <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+               ) : (
+                 <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor" style={{ marginLeft: '5px' }}><path d="M8 5v14l11-7z"/></svg>
+               )}
+            </div>
          </div>
          <audio ref={audioRef} src={currentSong.source} onEnded={() => setIsPlaying(false)} />
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '12px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '10px' }}>
         {options.map((option, idx) => (
           <button 
             key={idx} 
-            onClick={() => handleAnswer(option)}
+            onClick={(e) => { e.stopPropagation(); handleAnswer(option); }}
             style={{
               padding: '14px',
               fontSize: '1rem',
               backgroundColor: answered 
-                ? (option === currentSong.title ? '#28a745' : (option === selectedAnswer ? '#dc3545' : '#222'))
-                : '#333',
+                ? (option === currentSong.title ? '#28a745' : (option === selectedAnswer ? '#dc3545' : '#111'))
+                : '#222',
               color: 'white',
-              border: answered && option === currentSong.title ? '2px solid white' : '1px solid #444',
-              borderRadius: '10px',
+              border: answered && option === currentSong.title ? '2px solid white' : '1px solid #333',
+              borderRadius: '5px',
               cursor: answered ? 'default' : 'pointer',
               transition: 'all 0.2s',
               fontWeight: answered && option === currentSong.title ? 'bold' : 'normal'
@@ -168,27 +169,27 @@ export default function GuessGame({ songs, onNext }: GuessGameProps) {
 
       {answered && (
         <div style={{ 
-          marginTop: '25px', 
-          padding: '20px', 
-          backgroundColor: 'rgba(0,191,255,0.1)', 
-          borderRadius: '15px',
-          border: '1px solid rgba(0,191,255,0.2)'
+          marginTop: '20px', 
+          padding: '15px', 
+          backgroundColor: 'rgba(255,255,255,0.05)', 
+          borderRadius: '5px',
+          border: '1px solid #333'
         }}>
-          <p style={{ fontSize: '1.2rem', marginBottom: '15px' }}>
-            {selectedAnswer === currentSong.title ? "¡Correcto! 🎯" : `Era "${currentSong.title}"`}
+          <p style={{ fontSize: '1.1rem', marginBottom: '15px' }}>
+            {selectedAnswer === currentSong.title ? "¡Correcto! 🎉" : `Incorrecto. Era "${currentSong.title}"`}
           </p>
           <button 
-            onClick={nextSong}
+            onClick={(e) => { e.stopPropagation(); nextSong(); }}
             style={{ 
               backgroundColor: '#00BFFF', 
               color: 'black', 
               fontWeight: 'bold', 
-              padding: '12px 30px',
+              padding: '12px 0',
               width: '100%',
-              fontSize: '1.1rem'
+              fontSize: '1rem'
             }}
           >
-            Siguiente éxito
+            Siguiente canción
           </button>
         </div>
       )}
