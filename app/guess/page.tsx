@@ -83,13 +83,7 @@ export default function GuessPage() {
   }
 
   return (
-    <section style={{ 
-      maxHeight: 'calc(100vh - 180px)', 
-      overflowY: 'auto', 
-      paddingBottom: '20px',
-      scrollbarWidth: 'thin',
-      scrollbarColor: '#00BFFF #111'
-    }}>
+    <section>
       <div className="guess-game-container">
         <div style={{ textAlign: 'center', marginBottom: '20px' }}>
           <h2>Guess the Hit</h2>
