@@ -4,8 +4,15 @@ import { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import GuessGame from '@/components/GuessGame';
 
+interface Song {
+  trackName: string;
+  previewUrl: string;
+  artworkUrl100: string;
+  collectionName: string;
+}
+
 export default function GuessPage() {
-  const [songs, setSongs] = useState<any[]>([]);
+  const [songs, setSongs] = useState<Song[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -36,10 +43,10 @@ export default function GuessPage() {
         });
         
         // Filter out songs without preview or image to avoid broken UI
-        setSongs(mappedSongs.filter(s => s.previewUrl && s.artworkUrl100));
+        setSongs(mappedSongs.filter((s: Song) => s.previewUrl && s.artworkUrl100));
       } else {
         setError('No se pudieron cargar los éxitos actuales. Reintentando...');
-        setTimeout(getSongs, 2000);
+        setTimeout(() => { getSongs(); }, 2000);
       }
       
       setLoading(false);
