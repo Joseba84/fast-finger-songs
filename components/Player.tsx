@@ -51,20 +51,62 @@ export default function Player({ songs, currentIndex, onNext }: PlayerProps) {
 
   return (
     <div>
-      <div className="wrapper">
-        <span 
-          onClick={togglePlayPause} 
-          className={`play ${playing ? 'active' : ''}`}
-        ></span>
-        <img src={song.image} alt={song.title} />
+      <div className="wrapper" style={{ 
+        position: 'relative', 
+        width: '100%', 
+        aspectRatio: '1/1', 
+        backgroundColor: '#050505', 
+        borderRadius: '8px', 
+        overflow: 'hidden',
+        border: '1px solid #222',
+        cursor: 'pointer' 
+      }} onClick={togglePlayPause}>
+        
+        {/* Play/Pause Button - Same style as GuessGame */}
+        <div style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '70px',
+          height: '70px',
+          backgroundColor: 'rgba(0, 191, 255, 0.1)',
+          border: '3px solid #00BFFF',
+          borderRadius: '50%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#00BFFF',
+          zIndex: 10,
+          boxShadow: '0 0 15px rgba(0, 191, 255, 0.2)'
+        }}>
+          {playing ? (
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor">
+              <rect x="6" y="4" width="4" height="16" rx="1" />
+              <rect x="14" y="4" width="4" height="16" rx="1" />
+            </svg>
+          ) : (
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" style={{ marginLeft: '4px' }}>
+              <path d="M7 4v16l13-8z" strokeLinejoin="round" />
+            </svg>
+          )}
+        </div>
+
+        <img 
+          src={song.image} 
+          alt={song.title} 
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+        />
       </div>
       <audio 
         ref={audioRef} 
         onTimeUpdate={onTimeUpdate}
         src={song.source}
+        onPlay={() => setPlaying(true)}
+        onPause={() => setPlaying(false)}
       />
       <div className="progress-bar" style={{ width: progress }}></div>
-      <h2>{song.title}</h2>
+      <h2 style={{ marginTop: '15px' }}>{song.title}</h2>
     </div>
   );
 }
