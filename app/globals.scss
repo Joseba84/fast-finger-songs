@@ -17,17 +17,14 @@ body {
     color: #f9f9f9;
     margin:0;
     border-top: 3px solid $brand-color;
-    height: 100vh;
-    overflow-y: hidden;
-    @media(max-width: 767px) {
-        height: initial;
-        overflow-y: auto;
-    }
+    min-height: 100vh;
+    overflow-y: auto;
   }
 
   .container {
     max-width: 80%;
     margin: 60px auto;
+    padding-bottom: 60px; /* Space at the bottom to ensure everything is visible */
   }
 
   a { 
